@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Match — Onyx Activities</title>
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="icon" type="image/jpeg" href="../onyx.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060711; --surface: rgba(255,255,255,0.035); --border: rgba(255,255,255,0.08);
+      --purple: #7c3aed; --blue: #3b82f6; --text: #e2e8f0; --text-muted: #94a3b8;
+      --font: 'Space Grotesk', sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    .aurora { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse 80% 50% at 20% -20%, rgba(124,58,237,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% -10%, rgba(59,130,246,0.10) 0%, transparent 55%); }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--dur,3s) var(--delay,0s) ease-in-out infinite; }
+    @keyframes twinkle { 0%,100% { opacity: var(--min-op,0.1); } 50% { opacity: var(--max-op,0.7); } }
+
+    .screen { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+    .screen.hidden { display: none !important; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 44px 36px; max-width: 460px; width: 100%; }
+    .game-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(124,58,237,0.5); box-shadow: 0 0 28px rgba(124,58,237,0.3); margin-bottom: 18px; animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .game-title { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .game-title span { background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .game-sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 22px; }
+    .info-box { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 14px 16px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
+    .info-box strong { color: #c4b5fd; }
+    .name-input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: var(--font); font-size: 1rem; outline: none; transition: border-color 0.2s; margin-bottom: 12px; text-align: center; }
+    .name-input:focus { border-color: rgba(124,58,237,0.5); }
+    .name-input::placeholder { color: #475569; }
+    .btn-start { width: 100%; padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-family: var(--font); font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, var(--purple), var(--blue)); color: white; box-shadow: 0 4px 20px rgba(124,58,237,0.35); transition: all 0.2s; }
+    .btn-start:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn-start:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .game-wrap { width: 100%; max-width: 580px; }
+    .game-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px; }
+    .stat-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 16px; font-size: 0.875rem; }
+    .stat-pill .val { font-weight: 800; color: #a78bfa; font-size: 1rem; }
+
+    .grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      padding: 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+    .mem-card { aspect-ratio: 1; border-radius: 12px; cursor: pointer; perspective: 600px; position: relative; }
+    .mem-card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.35s ease; border-radius: 12px; }
+    .mem-card.flipped .mem-card-inner { transform: rotateY(180deg); }
+    .mem-card.matched .mem-card-inner { transform: rotateY(180deg); }
+    .mem-card-front, .mem-card-back { position: absolute; inset: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .mem-card-front { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(59,130,246,0.1)); border: 1px solid rgba(124,58,237,0.25); font-size: 1.4rem; color: #475569; }
+    .mem-card-front::after { content: '★'; font-size: 1.2rem; }
+    .mem-card-back { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); transform: rotateY(180deg); font-size: clamp(1.4rem, 5vw, 2rem); }
+    .mem-card.matched .mem-card-back { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); box-shadow: 0 0 12px rgba(34,197,94,0.2); }
+    .mem-card.wrong-flash .mem-card-back { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.5); }
+
+    .results-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 44px 36px; max-width: 460px; width: 100%; animation: fadeInUp 0.4s ease; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .res-emoji { font-size: 3.5rem; margin-bottom: 14px; display: block; }
+    .res-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
+    .res-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+    .big-stat { font-size: 3.5rem; font-weight: 900; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .big-stat-label { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+    .stats-row { display: flex; gap: 10px; margin-bottom: 20px; }
+    .stat-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+    .stat-val { font-size: 1.3rem; font-weight: 800; color: #a78bfa; }
+    .stat-key { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .share-box { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 12px 16px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+    .share-box strong { color: #c4b5fd; }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-primary { flex: 1; padding: 13px; border-radius: 12px; border: none; cursor: pointer; font-family: var(--font); font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, var(--purple), var(--blue)); color: white; box-shadow: 0 4px 16px rgba(124,58,237,0.3); transition: all 0.2s; }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-secondary { flex: 1; padding: 13px; border-radius: 12px; cursor: pointer; font-family: var(--font); font-size: 0.95rem; font-weight: 700; background: transparent; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-secondary:hover { border-color: rgba(124,58,237,0.4); color: var(--text); }
+
+    @media (max-width: 480px) {
+      .grid { gap: 7px; padding: 14px; }
+      .mem-card-front::after { font-size: 0.9rem; }
+      .card, .results-card { padding: 28px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="aurora"></div>
+
+  <!-- LOBBY -->
+  <div class="screen" id="screenLobby">
+    <div class="card">
+      <img src="../onyx.jpg" alt="Onyx" class="game-logo" />
+      <h1 class="game-title"><span>Memory</span> Match</h1>
+      <p class="game-sub">Flip cards to find all 8 matching pairs.<br/>Remember where they are — clear the board as fast as you can!</p>
+      <div class="info-box">
+        🃏 <strong>Multiplayer:</strong> Everyone gets the same card layout this hour.<br/>
+        Compare your time and flip count with your VC friends!
+      </div>
+      <input type="text" id="nameInput" class="name-input" placeholder="Your name or tag…" maxlength="24" autocomplete="off" />
+      <button class="btn-start" id="startBtn" disabled>Start Game ▶</button>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen hidden" id="screenGame">
+    <div class="game-wrap">
+      <div class="game-top">
+        <div class="stat-pill">Flips: <span class="val" id="flipCount">0</span></div>
+        <div class="stat-pill">⏱ <span class="val" id="timerDisp">0:00</span></div>
+        <div class="stat-pill">Pairs: <span class="val" id="pairCount">0</span>/8</div>
+      </div>
+      <div class="grid" id="memGrid"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen hidden" id="screenResults">
+    <div class="results-card">
+      <span class="res-emoji" id="resEmoji">🏆</span>
+      <h2 class="res-title" id="resTitle">Board Cleared!</h2>
+      <p class="res-sub" id="resSub">Player</p>
+      <div class="big-stat" id="finalTime">0:00</div>
+      <div class="big-stat-label">Total Time</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-val" id="finalFlips">0</div><div class="stat-key">Flips</div></div>
+        <div class="stat-box"><div class="stat-val" id="finalMisses">0</div><div class="stat-key">Misses</div></div>
+        <div class="stat-box"><div class="stat-val" id="finalAccuracy">100%</div><div class="stat-key">Accuracy</div></div>
+      </div>
+      <div class="share-box">
+        🃏 Beat your score! Share your <strong>time + flips</strong> in the VC.<br/>Same board, same rules — who did it faster?
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="btnPlayAgain">Play Again</button>
+        <a href="index.html" class="btn-secondary">← All Games</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const c=document.getElementById('stars');
+      for(let i=0;i<100;i++){
+        const s=document.createElement('div');s.className='star';
+        const sz=Math.random()*2.5+0.5;
+        s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--min-op:${(Math.random()*0.1+0.05).toFixed(2)};--max-op:${(Math.random()*0.6+0.3).toFixed(2)};`;
+        c.appendChild(s);
+      }
+    })();
+
+    const EMOJIS = ['🚀','⭐','🌙','🔮','💎','🌌','🪐','🌠'];
+
+    function mulberry32(seed) {
+      return function() {
+        seed|=0; seed=seed+0x6D2B79F5|0;
+        let t=Math.imul(seed^seed>>>15,1|seed);
+        t=t+Math.imul(t^t>>>7,61|t)^t;
+        return((t^t>>>14)>>>0)/4294967296;
+      };
+    }
+    function getSessionSeed() {
+      const n=new Date();
+      const s=`${n.getUTCFullYear()}${String(n.getUTCMonth()+1).padStart(2,'0')}${String(n.getUTCDate()).padStart(2,'0')}${String(n.getUTCHours()).padStart(2,'0')}`;
+      let h=0; for(let i=0;i<s.length;i++) h=((h<<5)-h+s.charCodeAt(i))|0;
+      return Math.abs(h);
+    }
+    function seededShuffle(arr, rng) {
+      const a=[...arr];
+      for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+      return a;
+    }
+
+    let playerName='Player', flips=0, misses=0, pairs=0;
+    let firstCard=null, secondCard=null, lockBoard=false;
+    let timerInterval=null, startTime=null;
+
+    const nameInput=document.getElementById('nameInput');
+    const startBtn=document.getElementById('startBtn');
+    nameInput.addEventListener('input',()=>{startBtn.disabled=!nameInput.value.trim();});
+    startBtn.addEventListener('click',()=>{
+      playerName=nameInput.value.trim()||'Player';
+      initGame();
+    });
+
+    function showScreen(id){
+      ['screenLobby','screenGame','screenResults'].forEach(s=>{
+        document.getElementById(s).classList.toggle('hidden',s!==id);
+      });
+    }
+
+    function initGame(){
+      flips=0;misses=0;pairs=0;firstCard=null;secondCard=null;lockBoard=false;
+      document.getElementById('flipCount').textContent='0';
+      document.getElementById('timerDisp').textContent='0:00';
+      document.getElementById('pairCount').textContent='0';
+      clearInterval(timerInterval);
+
+      const rng=mulberry32(getSessionSeed());
+      const cards=seededShuffle([...EMOJIS,...EMOJIS],rng);
+      const grid=document.getElementById('memGrid');
+      grid.innerHTML='';
+      cards.forEach((emoji,i)=>{
+        const card=document.createElement('div');
+        card.className='mem-card';
+        card.dataset.emoji=emoji;
+        card.innerHTML=`<div class="mem-card-inner"><div class="mem-card-front"></div><div class="mem-card-back">${emoji}</div></div>`;
+        card.addEventListener('click',()=>flipCard(card));
+        grid.appendChild(card);
+      });
+
+      showScreen('screenGame');
+      startTime=null;
+    }
+
+    function flipCard(card){
+      if(lockBoard||card.classList.contains('flipped')||card.classList.contains('matched')) return;
+      if(!startTime){
+        startTime=Date.now();
+        timerInterval=setInterval(updateTimer,500);
+      }
+      card.classList.add('flipped');
+      flips++;
+      document.getElementById('flipCount').textContent=flips;
+
+      if(!firstCard){ firstCard=card; return; }
+      secondCard=card;
+      lockBoard=true;
+
+      if(firstCard.dataset.emoji===secondCard.dataset.emoji){
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        pairs++;
+        document.getElementById('pairCount').textContent=pairs;
+        firstCard=null;secondCard=null;lockBoard=false;
+        if(pairs===EMOJIS.length) setTimeout(showResults,500);
+      } else {
+        misses++;
+        const a=firstCard,b=secondCard;
+        a.classList.add('wrong-flash');b.classList.add('wrong-flash');
+        setTimeout(()=>{
+          a.classList.remove('flipped','wrong-flash');
+          b.classList.remove('flipped','wrong-flash');
+          firstCard=null;secondCard=null;lockBoard=false;
+        },900);
+      }
+    }
+
+    function updateTimer(){
+      if(!startTime)return;
+      const s=Math.floor((Date.now()-startTime)/1000);
+      document.getElementById('timerDisp').textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    }
+
+    function showResults(){
+      clearInterval(timerInterval);
+      const totalMs=startTime?Date.now()-startTime:0;
+      const s=Math.floor(totalMs/1000);
+      const timeStr=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+      const accuracy=flips>0?Math.round((pairs*2/flips)*100):100;
+      const emoji=s<60?'🏆':s<120?'⭐':s<180?'🎯':'🔮';
+      const title=s<60?'Speed Demon!':s<120?'Nice Memory!':s<180?'Good Job!':'Cleared It!';
+
+      document.getElementById('resEmoji').textContent=emoji;
+      document.getElementById('resTitle').textContent=title;
+      document.getElementById('resSub').textContent=playerName;
+      document.getElementById('finalTime').textContent=timeStr;
+      document.getElementById('finalFlips').textContent=flips;
+      document.getElementById('finalMisses').textContent=misses;
+      document.getElementById('finalAccuracy').textContent=accuracy+'%';
+      showScreen('screenResults');
+    }
+
+    document.getElementById('btnPlayAgain').addEventListener('click',initGame);
+  </script>
+</body>
+</html>

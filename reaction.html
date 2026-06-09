@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reaction Duel — Onyx Activities</title>
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="icon" type="image/jpeg" href="../onyx.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060711; --surface: rgba(255,255,255,0.035); --border: rgba(255,255,255,0.08);
+      --purple: #7c3aed; --blue: #3b82f6; --text: #e2e8f0; --text-muted: #94a3b8;
+      --green: #22c55e; --red: #ef4444; --font: 'Space Grotesk', sans-serif;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow: hidden; }
+    .aurora {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 80% 50% at 20% -20%, rgba(124,58,237,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% -10%, rgba(59,130,246,0.10) 0%, transparent 55%);
+    }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--dur,3s) var(--delay,0s) ease-in-out infinite; }
+    @keyframes twinkle { 0%,100% { opacity: var(--min-op,0.1); } 50% { opacity: var(--max-op,0.7); } }
+
+    .screen { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+    .screen.hidden { display: none !important; }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 44px 36px; max-width: 460px; width: 100%; }
+    .game-logo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(124,58,237,0.5); box-shadow: 0 0 28px rgba(124,58,237,0.3); margin-bottom: 18px; animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .game-title { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .game-title span { background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .game-sub { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+    .info-box { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 14px 16px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; }
+    .info-box strong { color: #c4b5fd; }
+    .name-input { width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-family: var(--font); font-size: 1rem; outline: none; transition: border-color 0.2s; margin-bottom: 12px; text-align: center; }
+    .name-input:focus { border-color: rgba(124,58,237,0.5); }
+    .name-input::placeholder { color: #475569; }
+    .btn-start { width: 100%; padding: 14px; border-radius: 12px; border: none; cursor: pointer; font-family: var(--font); font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, var(--purple), var(--blue)); color: white; box-shadow: 0 4px 20px rgba(124,58,237,0.35); transition: all 0.2s; }
+    .btn-start:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(124,58,237,0.5); }
+    .btn-start:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .game-zone { width: 100%; max-width: 500px; }
+    .rounds-bar { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; }
+    .round-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); transition: all 0.3s; }
+    .round-dot.done { background: var(--green); border-color: var(--green); box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+    .round-dot.fail { background: var(--red); border-color: var(--red); }
+    .round-dot.active { border-color: rgba(124,58,237,0.6); animation: activePulse 1s ease-in-out infinite; }
+    @keyframes activePulse { 0%,100% { box-shadow: 0 0 0 rgba(124,58,237,0.4); } 50% { box-shadow: 0 0 12px rgba(124,58,237,0.6); } }
+
+    .reaction-area {
+      width: 280px; height: 280px; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; margin: 0 auto 32px;
+      border: 3px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: all 0.15s;
+      user-select: none; -webkit-user-select: none;
+    }
+    .reaction-area.waiting { border-color: rgba(124,58,237,0.3); }
+    .reaction-area.go {
+      background: radial-gradient(circle, rgba(34,197,94,0.25), rgba(34,197,94,0.08));
+      border-color: rgba(34,197,94,0.7);
+      box-shadow: 0 0 60px rgba(34,197,94,0.3), inset 0 0 40px rgba(34,197,94,0.1);
+      animation: goFlash 0.15s ease;
+    }
+    @keyframes goFlash { 0% { transform: scale(0.95); } 100% { transform: scale(1); } }
+    .reaction-area.early {
+      background: radial-gradient(circle, rgba(239,68,68,0.2), rgba(239,68,68,0.05));
+      border-color: rgba(239,68,68,0.6);
+      box-shadow: 0 0 40px rgba(239,68,68,0.25);
+    }
+    .reaction-area.showing-result {
+      background: radial-gradient(circle, rgba(59,130,246,0.18), rgba(59,130,246,0.04));
+      border-color: rgba(59,130,246,0.5);
+    }
+    .reaction-icon { font-size: 3.5rem; margin-bottom: 12px; transition: all 0.2s; }
+    .reaction-label { font-size: 1.1rem; font-weight: 700; color: var(--text-muted); }
+    .reaction-label.go-label { color: #86efac; font-size: 1.3rem; }
+    .reaction-label.early-label { color: #fca5a5; }
+
+    .status-bar { display: flex; justify-content: center; gap: 24px; font-size: 0.85rem; color: var(--text-muted); }
+    .status-bar span { color: var(--text); font-weight: 700; }
+
+    .results-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 44px 36px; max-width: 480px; width: 100%; animation: fadeInUp 0.4s ease; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .res-emoji { font-size: 3.5rem; margin-bottom: 14px; display: block; }
+    .res-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.02em; }
+    .res-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 28px; }
+    .avg-time { font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+    .avg-label { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 24px; }
+    .rounds-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .round-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; font-size: 0.875rem; }
+    .round-row .rr-label { color: var(--text-muted); }
+    .round-row .rr-val { font-weight: 700; }
+    .round-row .rr-val.fast { color: #86efac; }
+    .round-row .rr-val.miss { color: #fca5a5; }
+    .share-box { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 14px 16px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+    .share-box strong { color: #c4b5fd; }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-primary { flex: 1; padding: 13px; border-radius: 12px; border: none; cursor: pointer; font-family: var(--font); font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, var(--purple), var(--blue)); color: white; box-shadow: 0 4px 16px rgba(124,58,237,0.3); transition: all 0.2s; }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-secondary { flex: 1; padding: 13px; border-radius: 12px; cursor: pointer; font-family: var(--font); font-size: 0.95rem; font-weight: 700; background: transparent; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-secondary:hover { border-color: rgba(124,58,237,0.4); color: var(--text); }
+
+    @media (max-width: 480px) {
+      .reaction-area { width: 220px; height: 220px; }
+      .card, .results-card { padding: 28px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="aurora"></div>
+
+  <!-- LOBBY -->
+  <div class="screen" id="screenLobby">
+    <div class="card">
+      <img src="../onyx.jpg" alt="Onyx" class="game-logo" />
+      <h1 class="game-title"><span>Reaction</span> Duel</h1>
+      <p class="game-sub">Wait for the circle to flash green — tap it as fast as you can.<br/>5 rounds · Best average reaction time wins!</p>
+      <div class="info-box">
+        ⚡ <strong>Multiplayer:</strong> Compare your average reaction time with your VC friends.<br/>
+        Whoever taps fastest is the quickest mind in the channel.
+      </div>
+      <input type="text" id="nameInput" class="name-input" placeholder="Your name or tag…" maxlength="24" autocomplete="off" />
+      <button class="btn-start" id="startBtn" disabled>Start Game ▶</button>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen hidden" id="screenGame">
+    <div class="game-zone">
+      <div class="rounds-bar" id="roundsBar"></div>
+      <div class="reaction-area waiting" id="reactionArea" tabindex="0">
+        <div class="reaction-icon" id="reactionIcon">⚡</div>
+        <div class="reaction-label" id="reactionLabel">Get ready…</div>
+      </div>
+      <div class="status-bar">
+        <div>Round <span id="roundNum">1</span> / 5</div>
+        <div>Best: <span id="bestTime">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen hidden" id="screenResults">
+    <div class="results-card">
+      <span class="res-emoji" id="resEmoji">⚡</span>
+      <h2 class="res-title" id="resTitle">Lightning Fast!</h2>
+      <p class="res-sub" id="resSub">Player</p>
+      <div class="avg-time" id="avgTime">0ms</div>
+      <div class="avg-label">Average Reaction Time</div>
+      <div class="rounds-list" id="roundsList"></div>
+      <div class="share-box">
+        ⚡ Challenge your server! Tell them your average and see who's faster.
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" id="btnPlayAgain">Play Again</button>
+        <a href="index.html" class="btn-secondary">← All Games</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const c = document.getElementById('stars');
+      for(let i=0;i<100;i++){
+        const s=document.createElement('div'); s.className='star';
+        const sz=Math.random()*2.5+0.5;
+        s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--min-op:${(Math.random()*0.1+0.05).toFixed(2)};--max-op:${(Math.random()*0.6+0.3).toFixed(2)};`;
+        c.appendChild(s);
+      }
+    })();
+
+    const TOTAL_ROUNDS = 5;
+    let playerName = 'Player';
+    let currentRound = 0;
+    let times = [];
+    let waitTimeout = null;
+    let startTime = null;
+    let state = 'idle';
+
+    const nameInput = document.getElementById('nameInput');
+    const startBtn = document.getElementById('startBtn');
+    const roundsBar = document.getElementById('roundsBar');
+    const reactionArea = document.getElementById('reactionArea');
+    const reactionIcon = document.getElementById('reactionIcon');
+    const reactionLabel = document.getElementById('reactionLabel');
+    const roundNum = document.getElementById('roundNum');
+    const bestTimeEl = document.getElementById('bestTime');
+
+    function showScreen(id) {
+      ['screenLobby','screenGame','screenResults'].forEach(s => {
+        document.getElementById(s).classList.toggle('hidden', s !== id);
+      });
+    }
+
+    nameInput.addEventListener('input', () => { startBtn.disabled = !nameInput.value.trim(); });
+    startBtn.addEventListener('click', () => {
+      playerName = nameInput.value.trim() || 'Player';
+      currentRound = 0; times = [];
+      buildRoundsBar();
+      showScreen('screenGame');
+      setTimeout(() => beginRound(), 600);
+    });
+
+    function buildRoundsBar() {
+      roundsBar.innerHTML = '';
+      for(let i=0;i<TOTAL_ROUNDS;i++){
+        const d=document.createElement('div'); d.className='round-dot'; d.id='dot'+i;
+        roundsBar.appendChild(d);
+      }
+    }
+
+    function updateDot(i, cls) {
+      const d = document.getElementById('dot'+i);
+      if(d){ d.className='round-dot '+cls; }
+    }
+
+    function beginRound() {
+      state = 'waiting';
+      roundNum.textContent = currentRound + 1;
+      updateDot(currentRound, 'active');
+      setArea('waiting', '⚡', 'Wait for it…', '');
+      const delay = 1500 + Math.random() * 3500;
+      waitTimeout = setTimeout(() => flash(), delay);
+    }
+
+    function flash() {
+      state = 'go';
+      startTime = performance.now();
+      setArea('go', '🟢', 'TAP NOW!', 'go-label');
+    }
+
+    function setArea(cls, icon, label, labelCls) {
+      reactionArea.className = 'reaction-area ' + cls;
+      reactionIcon.textContent = icon;
+      reactionLabel.textContent = label;
+      reactionLabel.className = 'reaction-label ' + (labelCls||'');
+    }
+
+    reactionArea.addEventListener('click', handleTap);
+    reactionArea.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter') handleTap(); });
+
+    function handleTap() {
+      if(state === 'waiting') {
+        clearTimeout(waitTimeout);
+        state = 'idle';
+        updateDot(currentRound, 'fail');
+        times.push(null);
+        setArea('early', '❌', 'Too early! Wait for green.', 'early-label');
+        setTimeout(() => nextRound(), 1600);
+      } else if(state === 'go') {
+        const elapsed = Math.round(performance.now() - startTime);
+        state = 'showing-result';
+        times.push(elapsed);
+        updateDot(currentRound, 'done');
+        const valid = times.filter(t=>t!==null);
+        const best = valid.length ? Math.min(...valid) : null;
+        if(best) bestTimeEl.textContent = best+'ms';
+        setArea('showing-result', '✅', '', '');
+        reactionArea.innerHTML = `<div style="font-size:2.6rem;font-weight:900;color:#60a5fa">${elapsed}ms</div><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px">Reaction time</div>`;
+        setTimeout(() => nextRound(), 1400);
+      }
+    }
+
+    function nextRound() {
+      currentRound++;
+      if(currentRound >= TOTAL_ROUNDS) {
+        showResults();
+      } else {
+        reactionArea.innerHTML = `<div class="reaction-icon" id="reactionIcon">⚡</div><div class="reaction-label" id="reactionLabel">Get ready…</div>`;
+        beginRound();
+      }
+    }
+
+    function showResults() {
+      const valid = times.filter(t=>t!==null);
+      const avg = valid.length ? Math.round(valid.reduce((a,b)=>a+b,0)/valid.length) : null;
+      const emoji = !avg ? '🙈' : avg < 200 ? '🏆' : avg < 300 ? '⚡' : avg < 450 ? '🎯' : '🐢';
+      const title = !avg ? 'Needs Work' : avg < 200 ? 'Superhuman!' : avg < 300 ? 'Lightning Fast!' : avg < 450 ? 'Pretty Quick' : 'Keep Practicing';
+
+      document.getElementById('resEmoji').textContent = emoji;
+      document.getElementById('resTitle').textContent = title;
+      document.getElementById('resSub').textContent = playerName;
+      document.getElementById('avgTime').textContent = avg ? avg+'ms' : 'N/A';
+
+      const list = document.getElementById('roundsList');
+      list.innerHTML = times.map((t,i) => `
+        <div class="round-row">
+          <span class="rr-label">Round ${i+1}</span>
+          <span class="rr-val ${t===null?'miss':t<250?'fast':''}">${t===null?'❌ Too early':t+'ms'}</span>
+        </div>`).join('');
+
+      showScreen('screenResults');
+    }
+
+    document.getElementById('btnPlayAgain').addEventListener('click', () => {
+      currentRound=0; times=[];
+      buildRoundsBar();
+      showScreen('screenGame');
+      setTimeout(()=>beginRound(),600);
+    });
+  </script>
+</body>
+</html>
