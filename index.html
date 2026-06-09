@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onyx — Discord Bot</title>
+  <meta name="description" content="Onyx is a powerful Discord bot with AI chat, economy, games, music, and more." />
+
+  <!-- Open Graph / Discord embed -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://onyxai.site/" />
+  <meta property="og:title" content="Onyx — Discord Bot" />
+  <meta property="og:description" content="AI chat, economy, games, music & more. The bot that actually feels like a friend. Add Onyx to your server today!" />
+  <meta property="og:image" content="https://onyxai.site/onyx.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="1200" />
+  <meta property="og:site_name" content="Onyx Bot" />
+
+  <!-- Discord sidebar color + Twitter card -->
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Onyx — Discord Bot" />
+  <meta name="twitter:description" content="AI chat, economy, games, music & more. The bot that actually feels like a friend." />
+  <meta name="twitter:image" content="https://onyxai.site/onyx.jpg" />
+
+  <link rel="icon" type="image/jpeg" href="onyx.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Stars background -->
+  <div class="stars" id="stars"></div>
+  <div class="aurora"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <img src="onyx.jpg" alt="Onyx" class="nav-pfp" />
+        <span class="nav-name">Onyx</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="premium.html" class="nav-premium">⭐ Premium</a>
+        <a href="https://discord.gg/CFJPDqkGHe" target="_blank" class="nav-support">Support</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#commands" class="mobile-link">Commands</a>
+    <a href="premium.html" class="mobile-link mobile-premium">⭐ Premium</a>
+    <a href="activities.html" class="mobile-link">🎮 Activities</a>
+    <a href="https://discord.com/api/oauth2/authorize?client_id=1495346071822405663&permissions=277025770560&scope=bot%20applications.commands" target="_blank" class="mobile-link mobile-invite">Add to Discord</a>
+    <a href="https://discord.gg/CFJPDqkGHe" target="_blank" class="mobile-link mobile-support">Support Server</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-glow"></div>
+      <div class="pfp-wrapper" id="pfpWrapper">
+        <div class="pfp-ring"></div>
+        <div class="pfp-ring pfp-ring-2"></div>
+        <img src="onyx.jpg" alt="Onyx Bot" class="hero-pfp" id="heroPfp" />
+      </div>
+      <div class="badge">Discord Bot</div>
+      <h1 class="hero-title">
+        Meet <span class="gradient-text">Onyx</span>
+      </h1>
+      <p class="hero-sub">
+        AI chat, economy, games, music & more.<br />
+        The bot that actually feels like a friend.
+      </p>
+      <div class="hero-btns">
+        <a href="https://discord.com/api/oauth2/authorize?client_id=1495346071822405663&permissions=277025770560&scope=bot%20applications.commands"
+           target="_blank" class="btn btn-primary" id="inviteBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Add to Discord
+        </a>
+        <a href="https://discord.gg/CFJPDqkGHe" target="_blank" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.004.048.027.095.057.127a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Support Server
+        </a>
+      </div>
+      <div class="hero-prefix">Prefix: <code>+</code> &nbsp;·&nbsp; Also supports slash commands <code>/</code></div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-dot"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section features" id="features">
+    <div class="container">
+      <div class="section-label">What Onyx brings</div>
+      <h2 class="section-title">Everything your server needs</h2>
+      <div class="features-grid">
+        <div class="feature-card" data-delay="0">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 16v-4M12 8h.01"/></svg>
+          </div>
+          <h3>AI Chat</h3>
+          <p>Talk to Onyx like a real friend. Sarcastic, hilarious, warm — with full memory of your conversations.</p>
+        </div>
+        <div class="feature-card" data-delay="100">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>Economy System</h3>
+          <p>Earn coins, bank them, gamble, rob, run heists and climb the leaderboard. A full economy ecosystem built right in.</p>
+        </div>
+        <div class="feature-card" data-delay="200">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h3>Games & Fun</h3>
+          <p>Trivia, Hangman, Scramble, Tic-Tac-Toe, Ludo and more. Keep your server alive with built-in multiplayer games.</p>
+        </div>
+        <div class="feature-card" data-delay="300">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h3>Music</h3>
+          <p>Play songs directly in your voice channel. Simple controls — join, play, skip. Music when you want it.</p>
+        </div>
+        <div class="feature-card" data-delay="400">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          </div>
+          <h3>Server Tools</h3>
+          <p>Custom welcome messages, AI channel control, level-up announcements, moderation helpers and more.</p>
+        </div>
+        <div class="feature-card" data-delay="500">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+          <h3>Premium</h3>
+          <p>Unlock a custom bot personality, priority AI responses, and exclusive features unique to your server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section class="section commands-section" id="commands">
+    <div class="container">
+      <div class="section-label">Full command list</div>
+      <h2 class="section-title">Every command, right here</h2>
+      <p class="section-sub">All commands work with both <code>+prefix</code> and <code>/slash</code> syntax.</p>
+
+      <div class="cmd-tabs" id="cmdTabs">
+        <button class="cmd-tab active" data-cat="all">All</button>
+        <button class="cmd-tab" data-cat="ai">AI & Chat</button>
+        <button class="cmd-tab" data-cat="fun">Fun & Social</button>
+        <button class="cmd-tab" data-cat="games">Games</button>
+        <button class="cmd-tab" data-cat="economy">Economy</button>
+        <button class="cmd-tab" data-cat="leveling">Leveling</button>
+        <button class="cmd-tab" data-cat="music">Music</button>
+        <button class="cmd-tab" data-cat="utility">Utility</button>
+      </div>
+
+      <div class="cmd-search-wrap">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" class="cmd-search" id="cmdSearch" placeholder="Search commands..." />
+      </div>
+
+      <div class="cmd-grid" id="cmdGrid">
+        <!-- AI & Chat -->
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+chat</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Chat with Onyx AI — sarcastic, warm and unhinged just like a real friend</p>
+          <div class="cmd-alias">/chat</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+debate</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">AI debates both sides of any topic you throw at it</p>
+          <div class="cmd-alias">/debate</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+roast</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Get a playful AI roast — don't take it personally</p>
+          <div class="cmd-alias">/roast</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+compliment</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Send a sweet, heartfelt compliment to someone</p>
+          <div class="cmd-alias">/compliment</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+joke</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Get a fresh joke from Onyx</p>
+          <div class="cmd-alias">/joke</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+activate-ai</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Enable AI auto-replies in this channel — Onyx responds to every message</p>
+          <div class="cmd-alias">/activate-ai</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+stop-ai</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Disable AI auto-replies in this channel</p>
+          <div class="cmd-alias">/stop-ai</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+engage</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Let Onyx randomly chime into conversations in your server (20% chance)</p>
+          <div class="cmd-alias">/engage</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+disengage</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Make Onyx stay silent until @mentioned or called by name</p>
+          <div class="cmd-alias">/disengage</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+disable-ai</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Block all AI chat and image generation in a channel</p>
+          <div class="cmd-alias">/disable-ai</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+enable-ai</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Re-enable AI chat and image generation in this channel</p>
+          <div class="cmd-alias">/enable-ai</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+forget</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Clear your AI conversation memory and start fresh</p>
+          <div class="cmd-alias">/forget</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+toggledms</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Toggle Onyx's random DM messages on or off</p>
+          <div class="cmd-alias">/toggledms</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+switchserver</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Switch the AI mode used in this server</p>
+          <div class="cmd-alias">/switchserver · Manage Server</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+setbotname</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Set a custom word that triggers Onyx in addition to "onyx"</p>
+          <div class="cmd-alias">/setbotname</div>
+        </div>
+        <div class="cmd-card" data-cat="ai">
+          <div class="cmd-header">
+            <span class="cmd-name">+clearbotname</span>
+            <span class="cmd-badge ai">AI</span>
+          </div>
+          <p class="cmd-desc">Remove the custom trigger name for this server</p>
+          <div class="cmd-alias">/clearbotname</div>
+        </div>
+
+        <!-- Fun & Social -->
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+hug</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Send a warm hug to someone, complete with a GIF</p>
+          <div class="cmd-alias">/hug</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+pat</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Pat someone on the head with a cute GIF</p>
+          <div class="cmd-alias">/pat</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+slap</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Slap someone — playfully, of course</p>
+          <div class="cmd-alias">/slap</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+kiss</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Blow a kiss to someone with a GIF</p>
+          <div class="cmd-alias">/kiss</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+cuddle</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Cuddle someone with a cozy GIF</p>
+          <div class="cmd-alias">/cuddle</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+punch</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Punch someone (for fun, not real)</p>
+          <div class="cmd-alias">/punch</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+roll</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Roll a dice and see your fate</p>
+          <div class="cmd-alias">/roll</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+rps</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Play Rock Paper Scissors against Onyx</p>
+          <div class="cmd-alias">/rps</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+quote</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Get a random inspirational quote to brighten your day</p>
+          <div class="cmd-alias">/quote</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+meme</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Get a fresh meme idea generated by Onyx</p>
+          <div class="cmd-alias">/meme</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+choose</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Can't decide? Give Onyx options (separated by |) and let it pick</p>
+          <div class="cmd-alias">/choose</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+tod</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Truth or Dare — get a truth, dare, or random challenge</p>
+          <div class="cmd-alias">/tod · aliases: +truth +dare</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+wyr</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Would You Rather — a dilemma every time</p>
+          <div class="cmd-alias">/wyr</div>
+        </div>
+        <div class="cmd-card" data-cat="fun">
+          <div class="cmd-header">
+            <span class="cmd-name">+vibe</span>
+            <span class="cmd-badge fun">Fun</span>
+          </div>
+          <p class="cmd-desc">Check someone's current vibe — Onyx rates it</p>
+          <div class="cmd-alias">/vibe</div>
+        </div>
+
+        <!-- Games -->
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+numguess</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Start a number guessing game — can you crack the number?</p>
+          <div class="cmd-alias">/numguess</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+trivia</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Answer an AI-generated trivia question and test your knowledge</p>
+          <div class="cmd-alias">/trivia</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+scramble</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Unscramble a word before the timer runs out</p>
+          <div class="cmd-alias">/scramble</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+hangman</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Play the classic Hangman word-guessing game</p>
+          <div class="cmd-alias">/hangman</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+tictactoe</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Challenge a friend to Tic-Tac-Toe right in Discord</p>
+          <div class="cmd-alias">/tictactoe · alias: +ttt</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+mathquiz</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Race to answer a random math challenge first</p>
+          <div class="cmd-alias">/mathquiz</div>
+        </div>
+        <div class="cmd-card" data-cat="games">
+          <div class="cmd-header">
+            <span class="cmd-name">+ludo</span>
+            <span class="cmd-badge games">Game</span>
+          </div>
+          <p class="cmd-desc">Play a full multiplayer Ludo game with friends (or bots)</p>
+          <div class="cmd-alias">/ludo</div>
+        </div>
+
+        <!-- Economy -->
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+balance</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">View your full balance — wallet, bank, level and XP all in one place</p>
+          <div class="cmd-alias">/balance · aliases: +bal +wallet +bank</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+daily</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Claim your daily coins — keep your streak going for bonus rewards</p>
+          <div class="cmd-alias">/daily · 24h cooldown</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+work</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Work a shift to earn coins (1 hour cooldown)</p>
+          <div class="cmd-alias">/work · 1h cooldown</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+give</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Give coins to another user — share the wealth</p>
+          <div class="cmd-alias">/give · alias: +pay</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+gamble</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Gamble your coins — 50/50 chance to double or lose it all</p>
+          <div class="cmd-alias">/gamble · alias: +bet</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+deposit</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Deposit coins into your bank for safekeeping</p>
+          <div class="cmd-alias">/deposit · alias: +dep</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+withdraw</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Withdraw coins from your bank back to your wallet</p>
+          <div class="cmd-alias">/withdraw · alias: +with</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+rob</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Attempt to rob another user — risky but rewarding if it works</p>
+          <div class="cmd-alias">/rob</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+heist</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Start a group heist — the bigger the crew, the bigger the payout</p>
+          <div class="cmd-alias">/heist</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+joinheist</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">Join an active heist that someone else started</p>
+          <div class="cmd-alias">/joinheist</div>
+        </div>
+        <div class="cmd-card" data-cat="economy">
+          <div class="cmd-header">
+            <span class="cmd-name">+ecotop</span>
+            <span class="cmd-badge eco">Eco</span>
+          </div>
+          <p class="cmd-desc">View the server coin leaderboard — who's the richest?</p>
+          <div class="cmd-alias">/ecotop · alias: +richest</div>
+        </div>
+
+        <!-- Leveling -->
+        <div class="cmd-card" data-cat="leveling">
+          <div class="cmd-header">
+            <span class="cmd-name">+rank</span>
+            <span class="cmd-badge lvl">Level</span>
+          </div>
+          <p class="cmd-desc">View your current level, XP and progress bar to the next level</p>
+          <div class="cmd-alias">/rank</div>
+        </div>
+        <div class="cmd-card" data-cat="leveling">
+          <div class="cmd-header">
+            <span class="cmd-name">+togglelevels</span>
+            <span class="cmd-badge lvl">Level</span>
+          </div>
+          <p class="cmd-desc">Enable or disable level-up announcement messages in this server</p>
+          <div class="cmd-alias">/togglelevels · Manage Server</div>
+        </div>
+        <div class="cmd-card" data-cat="leveling">
+          <div class="cmd-header">
+            <span class="cmd-name">+setlevelchannel</span>
+            <span class="cmd-badge lvl">Level</span>
+          </div>
+          <p class="cmd-desc">Set which channel level-up announcements are sent to</p>
+          <div class="cmd-alias">/setlevelchannel · Manage Server</div>
+        </div>
+
+        <!-- Music -->
+        <div class="cmd-card" data-cat="music">
+          <div class="cmd-header">
+            <span class="cmd-name">+join</span>
+            <span class="cmd-badge music">Music</span>
+          </div>
+          <p class="cmd-desc">Pull Onyx into your voice channel</p>
+          <div class="cmd-alias">/join</div>
+        </div>
+        <div class="cmd-card" data-cat="music">
+          <div class="cmd-header">
+            <span class="cmd-name">+leave</span>
+            <span class="cmd-badge music">Music</span>
+          </div>
+          <p class="cmd-desc">Make Onyx leave the voice channel</p>
+          <div class="cmd-alias">/leave</div>
+        </div>
+        <div class="cmd-card" data-cat="music">
+          <div class="cmd-header">
+            <span class="cmd-name">+play</span>
+            <span class="cmd-badge music">Music</span>
+          </div>
+          <p class="cmd-desc">Play a song by name or URL in your voice channel</p>
+          <div class="cmd-alias">/play</div>
+        </div>
+        <div class="cmd-card" data-cat="music">
+          <div class="cmd-header">
+            <span class="cmd-name">+skip</span>
+            <span class="cmd-badge music">Music</span>
+          </div>
+          <p class="cmd-desc">Skip the currently playing song and move to the next</p>
+          <div class="cmd-alias">/skip</div>
+        </div>
+
+        <!-- Utility -->
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+help</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Show all available Onyx commands in Discord</p>
+          <div class="cmd-alias">/help</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+invite</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Get the link to invite Onyx to your server</p>
+          <div class="cmd-alias">/invite</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+feedback</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Send feedback or suggestions directly to the developers</p>
+          <div class="cmd-alias">+feedback [message]</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+setwelcome</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Set a custom welcome message in a specific channel for new members</p>
+          <div class="cmd-alias">Manage Server</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+welcome-dm</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Set a customizable welcome DM that new members receive</p>
+          <div class="cmd-alias">/welcomedm · Manage Server</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+disablewelcome</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Disable the server welcome system entirely</p>
+          <div class="cmd-alias">Manage Server</div>
+        </div>
+        <div class="cmd-card" data-cat="utility">
+          <div class="cmd-header">
+            <span class="cmd-name">+testwelcome</span>
+            <span class="cmd-badge util">Utility</span>
+          </div>
+          <p class="cmd-desc">Preview your configured welcome message before it goes live</p>
+          <div class="cmd-alias">Manage Server</div>
+        </div>
+      </div>
+
+      <div class="no-results" id="noResults" style="display:none;">
+        No commands match your search.
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-glow"></div>
+        <img src="onyx.jpg" alt="Onyx" class="cta-pfp" />
+        <h2>Ready to level up your server?</h2>
+        <p>Onyx is free to add. Just click below and pick your server.</p>
+        <div class="hero-btns">
+          <a href="https://discord.com/api/oauth2/authorize?client_id=1495346071822405663&permissions=277025770560&scope=bot%20applications.commands"
+             target="_blank" class="btn btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            Add Onyx
+          </a>
+          <a href="https://discord.gg/CFJPDqkGHe" target="_blank" class="btn btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.004.048.027.095.057.127a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            Join Support Server
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <img src="onyx.jpg" alt="Onyx" class="footer-pfp" />
+          <span>Onyx</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://discord.gg/CFJPDqkGHe" target="_blank">Support Server</a>
+          <a href="#commands">Commands</a>
+          <a href="#features">Features</a>
+          <a href="premium.html">Premium</a>
+        </div>
+        <div class="footer-copy">© 2026 Onyx Bot</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Chat Widget -->
+  <div id="chatWidget">
+    <button id="chatToggle" aria-label="Open chat">
+      <svg id="chatIconOpen" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-2 10H6V10h12v2zm0-3H6V7h12v2z"/></svg>
+      <svg id="chatIconClose" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="chatPanel">
+      <div id="chatHeader">
+        <img src="onyx.jpg" alt="Onyx" id="chatPfp" />
+        <div id="chatHeaderInfo">
+          <span id="chatName">Onyx</span>
+          <span id="chatStatus"><span class="chat-dot"></span>Online</span>
+        </div>
+      </div>
+      <div id="chatMessages">
+        <div class="chat-msg bot">
+          <img src="onyx.jpg" alt="Onyx" class="chat-avatar" />
+          <div class="chat-bubble">Hey! I'm Onyx 👋 Ask me anything about my features, commands, or Premium!</div>
+        </div>
+      </div>
+      <div id="chatInputArea">
+        <input type="text" id="chatInput" placeholder="Ask Onyx something..." maxlength="500" autocomplete="off" />
+        <button id="chatSend" aria-label="Send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
