@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onyx Activities</title>
+  <meta name="theme-color" content="#7c3aed" />
+  <link rel="icon" type="image/jpeg" href="../onyx.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060711; --surface: rgba(255,255,255,0.035); --surface-hover: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08); --purple: #7c3aed; --blue: #3b82f6;
+      --text: #e2e8f0; --text-muted: #94a3b8; --font: 'Space Grotesk', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    .aurora {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 80% 50% at 20% -20%, rgba(124,58,237,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% -10%, rgba(59,130,246,0.10) 0%, transparent 55%);
+    }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; border-radius: 50%; background: #fff; animation: twinkle var(--dur,3s) var(--delay,0s) ease-in-out infinite; }
+    @keyframes twinkle { 0%,100% { opacity: var(--min-op,0.1); } 50% { opacity: var(--max-op,0.7); } }
+
+    .page { position: relative; z-index: 1; padding: 60px 24px 80px; max-width: 960px; margin: 0 auto; text-align: center; }
+
+    .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 44px; }
+    .logo-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(124,58,237,0.5); box-shadow: 0 0 28px rgba(124,58,237,0.3); animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .logo-name { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .hub-label { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.75rem; font-weight: 700; color: #a78bfa; margin-bottom: 10px; }
+    .hub-title { font-size: clamp(2rem, 6vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 12px; }
+    .hub-sub { color: var(--text-muted); font-size: 1rem; margin-bottom: 52px; line-height: 1.6; }
+
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; text-align: left; }
+
+    .game-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px 24px; text-decoration: none; color: var(--text); display: flex;
+      flex-direction: column; transition: all 0.25s; position: relative; overflow: hidden;
+    }
+    .game-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(124,58,237,0.08) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .game-card:hover::before { opacity: 1; }
+    .game-card:hover {
+      border-color: rgba(124,58,237,0.45); background: var(--surface-hover);
+      transform: translateY(-5px); box-shadow: 0 16px 48px rgba(124,58,237,0.18);
+    }
+
+    .game-icon { font-size: 2.4rem; margin-bottom: 16px; display: block; }
+    .game-name { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .game-desc { color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; margin-bottom: 18px; flex: 1; }
+    .game-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tag { padding: 3px 9px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-multi { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86efac; }
+    .tag-live  { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); color: #c4b5fd; }
+    .tag-p2p   { background: rgba(234,179,8,0.12); border: 1px solid rgba(234,179,8,0.3); color: #fde047; }
+
+    .play-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px 0; border-radius: 10px; width: 100%;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      color: white; font-family: var(--font); font-size: 0.875rem; font-weight: 700;
+      border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 16px rgba(124,58,237,0.3); transition: all 0.2s;
+    }
+    .play-btn:hover { box-shadow: 0 6px 24px rgba(124,58,237,0.45); }
+
+    .session-note { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 8px; }
+    .session-note span { color: #a78bfa; font-weight: 700; }
+
+    .divider { height: 1px; background: var(--border); margin: 48px 0 36px; }
+    .footer { color: var(--text-muted); font-size: 0.85rem; line-height: 1.8; }
+    .footer a { color: #a78bfa; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer code { background: rgba(255,255,255,0.07); padding: 2px 7px; border-radius: 5px; font-size: 0.8rem; color: #c4b5fd; }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="aurora"></div>
+
+  <div class="page">
+    <div class="logo-wrap">
+      <img src="../onyx.jpg" alt="Onyx" class="logo-img" />
+      <span class="logo-name">Onyx Activities</span>
+    </div>
+
+    <div class="hub-label">Mini Games</div>
+    <h1 class="hub-title">Play with your server</h1>
+    <p class="hub-sub">Share the link in your Discord VC — everyone playing the same hour<br />gets the same session. Compare scores when you're done.</p>
+
+    <div class="games-grid">
+
+      <a href="trivia.html" class="game-card">
+        <span class="game-icon">🧠</span>
+        <div class="game-name">Void Trivia</div>
+        <p class="game-desc">10 questions, 20 seconds each. Race your VC friends on the same question set.</p>
+        <div class="game-tags">
+          <span class="tag tag-multi">Multiplayer</span>
+          <span class="tag tag-live">Same Session</span>
+        </div>
+        <span class="play-btn">Play Now ▶</span>
+        <div class="session-note">Score: points + speed bonus</div>
+      </a>
+
+      <a href="reaction.html" class="game-card">
+        <span class="game-icon">⚡</span>
+        <div class="game-name">Reaction Duel</div>
+        <p class="game-desc">Wait for the green flash — tap as fast as you can. 5 rounds, best average wins.</p>
+        <div class="game-tags">
+          <span class="tag tag-multi">Multiplayer</span>
+          <span class="tag tag-live">Same Session</span>
+        </div>
+        <span class="play-btn">Play Now ▶</span>
+        <div class="session-note">Score: reaction time in ms</div>
+      </a>
+
+      <a href="word.html" class="game-card">
+        <span class="game-icon">🔤</span>
+        <div class="game-name">Word Void</div>
+        <p class="game-desc">Guess the 5-letter mystery word in 6 tries. Same word for everyone this hour.</p>
+        <div class="game-tags">
+          <span class="tag tag-multi">Multiplayer</span>
+          <span class="tag tag-live">Same Session</span>
+        </div>
+        <span class="play-btn">Play Now ▶</span>
+        <div class="session-note">Score: guess count (lower = better)</div>
+      </a>
+
+      <a href="memory.html" class="game-card">
+        <span class="game-icon">🃏</span>
+        <div class="game-name">Memory Match</div>
+        <p class="game-desc">Flip cards to find 8 emoji pairs. Same board layout for everyone — who clears it fastest?</p>
+        <div class="game-tags">
+          <span class="tag tag-multi">Multiplayer</span>
+          <span class="tag tag-live">Same Session</span>
+        </div>
+        <span class="play-btn">Play Now ▶</span>
+        <div class="session-note">Score: time + accuracy</div>
+      </a>
+
+      <a href="chess.html" class="game-card" style="border-color:rgba(234,179,8,0.2);">
+        <span class="game-icon">♟</span>
+        <div class="game-name">Void Chess</div>
+        <p class="game-desc">Live 1v1 chess directly with someone in your VC. One player creates a room, the other joins with a code.</p>
+        <div class="game-tags">
+          <span class="tag tag-p2p">Live 1v1</span>
+          <span class="tag tag-live">Real-time</span>
+        </div>
+        <span class="play-btn" style="background:linear-gradient(135deg,#92400e,#d97706);">Play Now ▶</span>
+        <div class="session-note">Share a room code · P2P connection</div>
+      </a>
+
+      <a href="ludo.html" class="game-card" style="border-color:rgba(34,197,94,0.2);">
+        <span class="game-icon">🎲</span>
+        <div class="game-name">Void Ludo</div>
+        <p class="game-desc">Classic Ludo for 2–4 players. Create a room, share the code, and race your tokens home before everyone else.</p>
+        <div class="game-tags">
+          <span class="tag tag-p2p">Live 2–4</span>
+          <span class="tag tag-live">Real-time</span>
+        </div>
+        <span class="play-btn" style="background:linear-gradient(135deg,#14532d,#22c55e);">Play Now ▶</span>
+        <div class="session-note">Share a room code · P2P connection</div>
+      </a>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="footer">
+      <p>Hosted at <code>onyxai.site/games</code> · Works in any browser · No account needed</p>
+      <p style="margin-top:8px;">Part of <a href="https://onyxai.site">Onyx Bot</a> · <a href="https://discord.gg/CFJPDqkGHe">Support Server</a></p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const c=document.getElementById('stars');
+      for(let i=0;i<130;i++){
+        const s=document.createElement('div');s.className='star';
+        const sz=Math.random()*2.5+0.5;
+        s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;--min-op:${(Math.random()*0.1+0.05).toFixed(2)};--max-op:${(Math.random()*0.6+0.3).toFixed(2)};`;
+        c.appendChild(s);
+      }
+    })();
+  </script>
+</body>
+</html>
