@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Onyx Dashboard — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060711;--bg2:#0d0f1e;
+  --purple:#7c3aed;--purple-light:#a78bfa;
+  --border:rgba(255,255,255,.07);
+  --text:#e2e8f0;--muted:#64748b;--muted2:#94a3b8;
+  --radius:12px;--radius-sm:8px;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.5;overflow-x:hidden;display:flex;align-items:center;justify-content:center}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(124,58,237,.35);border-radius:3px}
+a{color:inherit;text-decoration:none}
+
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.aurora::before,.aurora::after{content:'';position:absolute;border-radius:50%;animation:float 14s ease-in-out infinite alternate}
+.aurora::before{width:65vw;height:65vh;top:-20vh;left:-15vw;background:radial-gradient(ellipse,rgba(124,58,237,.11) 0%,transparent 70%)}
+.aurora::after{width:55vw;height:55vh;bottom:-15vh;right:-15vw;background:radial-gradient(ellipse,rgba(99,102,241,.09) 0%,transparent 70%);animation-delay:3s}
+@keyframes float{to{transform:translate(7%,5%) scale(1.12)}}
+
+.wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2rem;max-width:400px;width:100%;text-align:center;padding:2rem}
+.login-icon{width:80px;height:80px;border-radius:22px;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto;box-shadow:0 0 60px rgba(124,58,237,.45)}
+h1{font-size:2.1rem;font-weight:700;letter-spacing:-.02em;margin-top:1rem}
+.sub{color:var(--muted2);font-size:.93rem;margin-top:.4rem}
+.card{background:rgba(13,15,30,.88);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.25rem;backdrop-filter:blur(12px)}
+.btn-discord{display:flex;align-items:center;justify-content:center;gap:.625rem;width:100%;padding:.8rem 1.25rem;border-radius:var(--radius-sm);background:linear-gradient(135deg,#5865f2,#4752c4);color:#fff;font-weight:600;font-size:.95rem;box-shadow:0 4px 18px rgba(88,101,242,.4);transition:transform .15s,box-shadow .15s}
+.btn-discord:hover{transform:scale(1.02);box-shadow:0 6px 24px rgba(88,101,242,.55)}
+.note{font-size:.75rem;color:var(--muted);line-height:1.5}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.pill{padding:.25rem .875rem;border-radius:999px;font-size:.75rem;font-weight:500;background:rgba(124,58,237,.1);color:var(--purple-light);border:1px solid rgba(124,58,237,.2)}
+.error-box{display:none;width:100%;padding:.75rem 1rem;border-radius:var(--radius-sm);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;font-size:.83rem;text-align:left}
+.spin{width:28px;height:28px;border:2px solid var(--purple);border-top-color:transparent;border-radius:50%;animation:spin .75s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100}
+#loader.hide{display:none}
+</style>
+</head>
+<body>
+
+<div id="loader"><div style="width:32px;height:32px;border:2px solid #7c3aed;border-top-color:transparent;border-radius:50%;animation:spin .75s linear infinite"></div></div>
+<div class="aurora"></div>
+
+<div class="wrap">
+  <div>
+    <div class="login-icon">✦</div>
+    <h1>Onyx Dashboard</h1>
+    <p class="sub">Manage your servers, economy &amp; AI settings</p>
+  </div>
+
+  <div id="error-box" class="error-box"></div>
+
+  <div class="card">
+    <p style="font-size:.88rem;color:#cbd5e1">Sign in with Discord to access your servers</p>
+    <a id="discord-btn" href="#" class="btn-discord">
+      <svg width="20" height="15" viewBox="0 0 71 55" fill="none"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.6.4a.2.2 0 0 0-.2.1 40.8 40.8 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A38 38 0 0 0 25.6.5a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.9 4.9a.2.2 0 0 0-.1.1C1.6 18.6-.9 31.9.3 45.1a.2.2 0 0 0 .1.1 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4c.4-.3.7-.6 1.1-.9a.2.2 0 0 1 .2 0c11.5 5.2 24 5.2 35.3 0a.2.2 0 0 1 .2 0l1.1.9a.2.2 0 0 1 0 .4 36.2 36.2 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.1 47.1 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.7 58.7 0 0 0 17.7-9 .2.2 0 0 0 .1-.1c1.5-15.3-2.5-28.5-10.6-40.2a.2.2 0 0 0-.1-.1ZM23.7 37.3c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Z" fill="white"/></svg>
+      Login with Discord
+    </a>
+    <div id="spinner" class="spin"></div>
+    <p class="note">We only request your username and server list.<br>No messages are read.</p>
+  </div>
+
+  <div class="pills">
+    <span class="pill">Economy Stats</span>
+    <span class="pill">XP Leaderboards</span>
+    <span class="pill">AI Settings</span>
+    <span class="pill">Server Management</span>
+  </div>
+</div>
+
+<script>
+const BACKEND = "https://onyxbot-ten.vercel.app";
+const API = BACKEND + "/api";
+const DASHBOARD_URL = "https://onyxai.site/dashboard.html";
+const MANAGE_URL    = "https://onyxai.site/manage.html";
+const LOGIN_URL = `https://discord.com/api/oauth2/authorize?client_id=1495346071822405663&redirect_uri=${encodeURIComponent(DASHBOARD_URL)}&response_type=code&scope=identify%20guilds&prompt=none`;
+
+function showError(msg){
+  const b=document.getElementById("error-box");
+  b.textContent=msg;b.style.display="block";
+  document.getElementById("spinner").style.display="none";
+}
+
+async function init(){
+  document.getElementById("discord-btn").href = LOGIN_URL;
+
+  const qs = new URLSearchParams(location.search);
+  const code = qs.get("code");
+  const err  = qs.get("error");
+
+  if(err){
+    document.getElementById("loader").classList.add("hide");
+    showError("Discord login failed: " + err);
+    return;
+  }
+
+  // Already logged in? Skip to manage page
+  const saved = localStorage.getItem("onyx_token");
+  if(saved && !code){
+    // Quick verify the token is still valid
+    try{
+      const r = await fetch(API+"/auth/me",{headers:{Authorization:"Bearer "+saved}});
+      if(r.ok){
+        window.location.replace(MANAGE_URL);
+        return;
+      }
+    }catch(e){}
+    localStorage.removeItem("onyx_token");
+  }
+
+  if(code){
+    document.getElementById("loader").classList.add("hide");
+    document.getElementById("spinner").style.display="block";
+    document.getElementById("discord-btn").style.pointerEvents="none";
+    history.replaceState({},"",location.pathname);
+    try{
+      const r = await fetch(API+"/auth/exchange?code="+encodeURIComponent(code)+"&redirect_uri="+encodeURIComponent(DASHBOARD_URL));
+      if(r.ok){
+        const data = await r.json();
+        if(data.token){
+          localStorage.setItem("onyx_token", data.token);
+          window.location.replace(MANAGE_URL);
+          return;
+        }
+      }
+      showError("Login failed — could not exchange Discord code. Try again.");
+    }catch(e){
+      showError("Login failed — network error. Try again.");
+    }
+    return;
+  }
+
+  document.getElementById("loader").classList.add("hide");
+}
+
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
